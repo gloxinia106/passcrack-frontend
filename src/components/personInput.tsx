@@ -13,12 +13,12 @@ export default function PersonInput({ register }: PersonInputProps) {
       <div className="space-x-1 flex">
         <Input
           register={register("person.first_name")}
-          className="w-1/2"
+          className="w-1/2 font-light font-['Noto_Sans_KR']"
           placeholder="성"
         />
         <Input
           register={register("person.last_name")}
-          className="w-1/2"
+          className="w-1/2 font-light font-['Noto_Sans_KR']"
           placeholder="이름"
         />
       </div>
