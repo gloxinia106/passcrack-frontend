@@ -197,6 +197,36 @@ function App() {
           )}
         </button>
       </form>
+      <table className="my-14 table-fixed w-full max-w-5xl text-baseyellow font-['ChosunSm'] border border-baseyellow">
+        <thead>
+          <tr>
+            <th className="border border-baseyellow w-7/12 py-3">
+              원본 비밀번호
+            </th>
+            <th className="border border-baseyellow w-3/12 py-3">
+              크랙된 비밀번호
+            </th>
+            <th className="border border-baseyellow w-2/12 py-3">BruteForce</th>
+          </tr>
+        </thead>
+        <tbody>
+          {result?.ok
+            ? result.passwords.map((value: any) => (
+                <tr>
+                  <td className="border border-baseyellow break-words w-4/8 py-3 px-2">
+                    {value.hash}
+                  </td>
+                  <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
+                    {value.ok ? value.password : ""}
+                  </td>
+                  <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
+                    {value.ok ? "" : <button>asdasd</button>}
+                  </td>
+                </tr>
+              ))
+            : ""}
+        </tbody>
+      </table>
     </div>
   );
 }
