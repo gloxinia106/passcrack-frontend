@@ -4,6 +4,7 @@ import TextInput from "./components/textInput";
 import PersonInput from "./components/personInput";
 import { useForm } from "react-hook-form";
 import { extrackYear } from "./utility/extract";
+import BruteforceBtn from "./components/bruteforceBtn";
 
 export interface FormProps {
   text?: string;
@@ -73,7 +74,6 @@ function App() {
         });
         result = await response.json();
       }
-      console.log(result);
       setResult(result);
     } catch (error) {
       console.log(error);
@@ -81,6 +81,7 @@ function App() {
       setLoading(false);
     }
   };
+  console.log(result);
   return (
     <div className="bg-black flex flex-col items-center w-full min-h-screen">
       <header className="flex items-center pt-16">
@@ -197,36 +198,52 @@ function App() {
           )}
         </button>
       </form>
-      <table className="my-14 table-fixed w-full max-w-5xl text-baseyellow font-['ChosunSm'] border border-baseyellow">
-        <thead>
-          <tr>
-            <th className="border border-baseyellow w-7/12 py-3">
-              원본 비밀번호
-            </th>
-            <th className="border border-baseyellow w-3/12 py-3">
-              크랙된 비밀번호
-            </th>
-            <th className="border border-baseyellow w-2/12 py-3">BruteForce</th>
-          </tr>
-        </thead>
-        <tbody>
-          {result?.ok
-            ? result.passwords.map((value: any) => (
-                <tr>
-                  <td className="border border-baseyellow break-words w-4/8 py-3 px-2">
-                    {value.hash}
-                  </td>
-                  <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
-                    {value.ok ? value.password : ""}
-                  </td>
-                  <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
-                    {value.ok ? "" : <button>asdasd</button>}
-                  </td>
-                </tr>
-              ))
-            : ""}
-        </tbody>
-      </table>
+      {result?.ok ? (
+        <table className="my-14 table-fixed w-full max-w-5xl text-baseyellow font-['ChosunSm'] border border-baseyellow">
+          <thead>
+            <tr>
+              <th className="border border-baseyellow w-7/12 py-3">
+                원본 비밀번호
+              </th>
+              <th className="border border-baseyellow w-3/12 py-3">
+                크랙된 비밀번호
+              </th>
+              <th className="border border-baseyellow w-2/12 py-3">
+                BruteForce
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {result.passwords.map((value: any, index: any) => (
+              <tr>
+                <td
+                  className={`border border-baseyellow ${
+                    value.ok ? "text-baseyellow" : "text-red-500"
+                  } break-words w-4/8 py-3 px-2`}
+                >
+                  {value.hash}
+                </td>
+                <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
+                  {value.ok ? value.password : ""}
+                </td>
+                <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
+                  {value.ok ? (
+                    ""
+                  ) : (
+                    <BruteforceBtn
+                      index={index}
+                      result={result}
+                      setResult={setResult}
+                    />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
