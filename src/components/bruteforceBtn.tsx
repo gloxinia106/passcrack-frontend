@@ -68,7 +68,7 @@ export default function BruteforceBtn({
       onClick={onClickBtn}
       className="border-2 text-red-700 border-red-700 py-2 px-7 rounded-full hover:bg-red-700 hover:text-black"
     >
-      YES
+      Proceed
     </button>
   );
 }

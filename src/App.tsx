@@ -144,7 +144,7 @@ function App() {
                   setMode("korean");
                 }}
               >
-                <img className="w-14 h-14 mr-2" src="./privacy-dark.png"></img>
+                <img className="w-14 h-14 mr-2" src="./korean-dark.png"></img>
                 <span
                   className={`${
                     mode === "korean"
@@ -203,10 +203,10 @@ function App() {
           <thead>
             <tr>
               <th className="border border-baseyellow w-7/12 py-3">
-                원본 비밀번호
+                Passwords (Hashed)
               </th>
               <th className="border border-baseyellow w-3/12 py-3">
-                크랙된 비밀번호
+                Passwords (Cracked)
               </th>
               <th className="border border-baseyellow w-2/12 py-3">
                 BruteForce
