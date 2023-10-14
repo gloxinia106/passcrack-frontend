@@ -108,7 +108,7 @@ function App() {
                   isFile ? "text-baseyellow" : "text-white opacity-50"
                 } text-2xl`}
               >
-                File upload
+                파일 업로드
               </span>
             </button>
             {isFile ? (
@@ -134,7 +134,7 @@ function App() {
                       : "text-white opacity-50"
                   } text-2xl`}
                 >
-                  English
+                  영어 사전
                 </span>
               </button>
               <button
@@ -152,7 +152,7 @@ function App() {
                       : "text-white opacity-50"
                   } text-2xl`}
                 >
-                  Korean
+                  한국어 사전
                 </span>
               </button>
               <button
@@ -170,7 +170,7 @@ function App() {
                       : "text-white opacity-50"
                   } text-2xl`}
                 >
-                  Custom
+                  커스텀 사전
                 </span>
               </button>
             </div>
@@ -194,7 +194,7 @@ function App() {
               <path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z" />
             </svg>
           ) : (
-            <span>Start</span>
+            <span>비밀번호 크랙</span>
           )}
         </button>
       </form>
@@ -203,13 +203,11 @@ function App() {
           <thead>
             <tr>
               <th className="border border-baseyellow w-7/12 py-3">
-                Passwords (Hashed)
+                암호화된 비밀번호
               </th>
-              <th className="border border-baseyellow w-3/12 py-3">
-                Passwords (Cracked)
-              </th>
+              <th className="border border-baseyellow w-3/12 py-3">비밀번호</th>
               <th className="border border-baseyellow w-2/12 py-3">
-                BruteForce
+                브루트포스
               </th>
             </tr>
           </thead>
@@ -218,12 +216,12 @@ function App() {
               <tr>
                 <td
                   className={`border border-baseyellow ${
-                    value.ok ? "text-baseyellow" : "text-red-500"
+                    value.ok ? "text-green-500" : "text-red-500"
                   } break-words w-4/8 py-3 px-2`}
                 >
                   {value.hash}
                 </td>
-                <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
+                <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center text-green-500">
                   {value.ok ? value.password : ""}
                 </td>
                 <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">

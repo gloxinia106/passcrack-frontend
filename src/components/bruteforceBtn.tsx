@@ -66,9 +66,9 @@ export default function BruteforceBtn({
   ) : (
     <button
       onClick={onClickBtn}
-      className="border-2 text-red-700 border-red-700 py-2 px-7 rounded-full hover:bg-red-700 hover:text-black"
+      className="border-2 text-sm text-red-700 border-red-700 py-2 px-7 rounded-full hover:bg-red-700 hover:text-black"
     >
-      Proceed
+      진행하기
     </button>
   );
 }

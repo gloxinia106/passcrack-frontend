@@ -55,7 +55,9 @@ export default function FileUpload({ setValue, watch }: FileUploadProps) {
               />
             </svg>
           </div>
-          <div className="mt-3 font-['ChosunSm']">Click or Upload an image</div>
+          <div className="mt-3 font-['ChosunSm']">
+            클릭하거나 이미지를 올려주세요
+          </div>
         </div>
       )}
     </FileUploader>

@@ -14,17 +14,17 @@ export default function PersonInput({ register }: PersonInputProps) {
         <Input
           register={register("person.first_name")}
           className="w-1/2 font-light font-['Noto_Sans_KR']"
-          placeholder="First Name"
+          placeholder="성"
         />
         <Input
           register={register("person.last_name")}
           className="w-1/2 font-light font-['Noto_Sans_KR']"
-          placeholder="Last Name"
+          placeholder="이름"
         />
       </div>
       <div>
         <div className="text-xs text-white mb-2 text-opacity-50 font-['ChosunSm']">
-          Date of Birth
+          생년월일
         </div>
         <div className="space-x-1 flex">
           <Input
@@ -46,7 +46,7 @@ export default function PersonInput({ register }: PersonInputProps) {
       </div>
       <div>
         <div className="text-xs text-white mb-2 text-opacity-50 font-['ChosunSm']">
-          Phone Number
+          휴대폰번호
         </div>
         <div className="space-x-1 flex">
           <Input
