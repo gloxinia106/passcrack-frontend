@@ -29,59 +29,24 @@ function App() {
   const { register, handleSubmit, setValue, watch } = useForm<FormProps>();
 
   const onSubmit = async (data: FormProps) => {
-    setLoading(true);
-    let obj: any = {};
-    const formData = new FormData();
-    if (mode == "custom") {
-      const phoneNumber = `${data.person?.phone_number1}-${data.person?.phone_number2}-${data.person?.phone_number3}`;
-      const birthMonth = parseInt(data.person!.birth_month, 10).toString();
-      const birthDay = parseInt(data.person!.birth_day, 10).toString();
-      const birthYear = extrackYear(data.person!.birth_year);
-      const person = {
-        first_name: data.person?.first_name,
-        last_name: data.person?.last_name,
-        birth_year: birthYear,
-        birth_month: birthMonth,
-        birth_day: birthDay,
-        phone_number: phoneNumber,
+    if (isFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const lines = (e.target?.result as string).trim().split(/\r\n|\n/);
+        const arr = lines.map((line) => {
+          return { hash: line, ok: false };
+        });
+        setResult({ ok: true, passwords: arr });
       };
-      if (isFile) {
-        formData.append("person", JSON.stringify(person));
-      } else {
-        obj["person"] = person;
-      }
-    }
-    let result = {};
-    try {
-      if (isFile) {
-        formData.append("mode", mode);
-        formData.append("file", data.file!);
-        const response = await fetch("http://localhost:5000/api/file-crack", {
-          method: "POST",
-          body: formData,
-        });
-        result = await response.json();
-      } else {
-        const arrayText = data.text?.split(/\s+/);
-        obj["values"] = arrayText;
-        obj["mode"] = mode;
-        const response = await fetch("http://localhost:5000/api/text-crack", {
-          headers: {
-            "Content-Type": `application/json`,
-          },
-          method: "POST",
-          body: JSON.stringify(obj),
-        });
-        result = await response.json();
-      }
-      setResult(result);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      reader.readAsText(data.file!);
+    } else {
+      const lines = data.text!.trim().split(/\r\n|\n/);
+      const arr = lines!.map((line) => {
+        return { hash: line, ok: false };
+      });
+      setResult({ ok: true, passwords: arr });
     }
   };
-  console.log(result);
   return (
     <div className="bg-black flex flex-col items-center w-full min-h-screen">
       <header className="flex items-center pt-16">
