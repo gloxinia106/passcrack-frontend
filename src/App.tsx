@@ -3,7 +3,7 @@ import FileUpload from "./components/fileUpload";
 import TextInput from "./components/textInput";
 import PersonInput from "./components/personInput";
 import { useForm } from "react-hook-form";
-import { extrackYear } from "./utility/extract";
+import { extrackYear, readFile } from "./utility/extract";
 import BruteforceBtn from "./components/bruteforceBtn";
 
 export interface FormProps {
@@ -29,23 +29,75 @@ function App() {
   const { register, handleSubmit, setValue, watch } = useForm<FormProps>();
 
   const onSubmit = async (data: FormProps) => {
+    let arr: any[] = [];
     if (isFile) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const lines = (e.target?.result as string).trim().split(/\r\n|\n/);
-        const arr = lines.map((line) => {
-          return { hash: line, ok: false };
-        });
-        setResult({ ok: true, passwords: arr });
-      };
-      reader.readAsText(data.file!);
+      const result: any = await readFile(data.file!);
+      const lines = result.trim().split(/\r\n|\n/);
+      arr = lines.map((line: any) => {
+        return { hash: line, ok: false, loading: true };
+      });
+      setResult({ ok: true, passwords: arr });
     } else {
       const lines = data.text!.trim().split(/\r\n|\n/);
-      const arr = lines!.map((line) => {
-        return { hash: line, ok: false };
+      arr = lines!.map((line) => {
+        return { hash: line, ok: false, loading: true };
       });
       setResult({ ok: true, passwords: arr });
     }
+    let obj: any = {};
+    if (mode == "custom") {
+      const phoneNumber = `${data.person?.phone_number1}-${data.person?.phone_number2}-${data.person?.phone_number3}`;
+      const birthMonth = parseInt(data.person!.birth_month, 10).toString();
+      const birthDay = parseInt(data.person!.birth_day, 10).toString();
+      const birthYear = extrackYear(data.person!.birth_year);
+      const person = {
+        first_name: data.person?.first_name,
+        last_name: data.person?.last_name,
+        birth_year: birthYear,
+        birth_month: birthMonth,
+        birth_day: birthDay,
+        phone_number: phoneNumber,
+      };
+      obj["person"] = person;
+    }
+
+    const updateResult = (hash: string, ok: boolean, password: string) => {
+      setResult((prevResult: any) => {
+        return {
+          ...prevResult,
+          passwords: prevResult.passwords.map((p: any) => {
+            if (p.hash === hash) {
+              return { ...p, ok, password, loading: false };
+            }
+            return p;
+          }),
+        };
+      });
+    };
+    obj["mode"] = mode;
+
+    const promises = arr.map(async (item: any) => {
+      const payload = { value: item.hash, ...obj };
+      try {
+        const response = await fetch("http://localhost:5000/api/text-crack", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // 결과를 업데이트합니다.
+          updateResult(item.hash, data.ok, data.password);
+        } else {
+          // 요청이 실패하면 에러를 처리합니다.
+          updateResult(item.hash, false, "");
+        }
+      } catch (error) {
+        console.error(error);
+        updateResult(item.hash, false, "");
+      }
+    });
+    await Promise.all(promises);
   };
   return (
     <div className="bg-black flex flex-col items-center w-full min-h-screen">
@@ -190,7 +242,17 @@ function App() {
                   {value.ok ? value.password : ""}
                 </td>
                 <td className="border border-baseyellow break-words w-1/8 py-3 px-2 text-center">
-                  {value.ok ? (
+                  {value.loading ? (
+                    <div className="flex items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        className="w-5 h-5 fill-white animate-spin"
+                      >
+                        <path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z" />
+                      </svg>
+                    </div>
+                  ) : value.ok ? (
                     ""
                   ) : (
                     <BruteforceBtn
